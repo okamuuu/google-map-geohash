@@ -1,0 +1,23 @@
+{
+  "name": "google-map-geohash",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel start src/index.html"
+  },
+  "dependencies": {
+    "@googlemaps/loader": "^0.0.5",
+    "g": "^2.0.1",
+    "google-maps-api-loader": "^1.1.1",
+    "http-server": "^0.12.1",
+    "ngeohash": "^0.6.3",
+    "vue": "^2.6.11",
+    "vue-hot-reload-api": "^2.3.4"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.1.1",
+    "sass": "^1.24.4",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
