@@ -3,7 +3,7 @@ import App from './app.vue';
 
 import ChildMarker from './child-marker'
 
-Vue.component('ChildMarker', ChildMarker);
+Vue.component('child-marker', ChildMarker);
 
 new Vue({
   el: '#app',

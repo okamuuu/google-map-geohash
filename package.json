@@ -1,10 +1,12 @@
 {
   "name": "google-map-geohash",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/main.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel start src/index.html"
+    "start": "parcel start src/index.html",
+    "predeploy": "parcel build src/index.html --public-url https://okamuuu.github.io/google-map-geohash/",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@googlemaps/loader": "^0.0.5",
@@ -17,6 +19,8 @@
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.1.1",
+    "cssnano": "^4.1.10",
+    "gh-pages": "^2.2.0",
     "sass": "^1.24.4",
     "vue-template-compiler": "^2.6.11"
   }
