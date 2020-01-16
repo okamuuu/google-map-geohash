@@ -10986,7 +10986,7 @@ var items = [[35.692734, 139.703752], // 新宿ピカデリー
 ];
 
 function getGeoHash(latitude, longitude) {
-  var precision = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 9;
+  var precision = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5;
   return _ngeohash.default.encode(latitude, longitude, precision);
 }
 
@@ -11030,15 +11030,22 @@ var _default = {
     initializeMap: function initializeMap() {
       var mapContainer = this.$el.querySelector('#map');
       var Map = this.google.maps.Map;
-      this.map = new Map(mapContainer, this.mapConfig);
-      this.drawGeohashArea("xn77519jj", 1.0);
-      this.drawGeohashArea("xn77519j", 0.8);
-      this.drawGeohashArea("xn77519", 0.7);
-      this.drawGeohashArea("xn7751", 0.6);
-      this.drawGeohashArea("xn775", 0.5);
+      this.map = new Map(mapContainer, this.mapConfig); // this.drawGeohashArea("xn77519jj", 1.0)
+      // this.drawGeohashArea("xn77519j", 0.8)
+      // this.drawGeohashArea("xn77519", 0.7)
+      // this.drawGeohashArea("xn7751", 0.6)
+      // this.drawGeohashArea("xn775", 0.5)
+
+      this.drawGeohashNeighbors("xn7751");
+    },
+    drawGeohashNeighbors: function drawGeohashNeighbors(hash) {
+      this.drawGeohashArea(hash);
+
+      _ngeohash.default.neighbors(hash).forEach(this.drawGeohashArea);
     },
     drawGeohashArea: function drawGeohashArea(hash) {
       var strokeOpacity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.0;
+      console.log("drawGeohashArea");
 
       var bbox = _ngeohash.default.decode_bbox(hash);
 
@@ -11332,7 +11339,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49941" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60733" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
