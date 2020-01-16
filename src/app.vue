@@ -51,7 +51,7 @@ const items = [
  [ 35.692233, 139.703012 ], // 紀伊国屋書店
 ]
 
-function getGeoHash(latitude, longitude, precision=9) {
+function getGeoHash(latitude, longitude, precision=5) {
   return geohash.encode(latitude, longitude, precision);
 }
 
@@ -87,13 +87,19 @@ export default {
       const { Map } = this.google.maps
       this.map = new Map(mapContainer, this.mapConfig)
     
-      this.drawGeohashArea("xn77519jj", 1.0)
-      this.drawGeohashArea("xn77519j", 0.8)
-      this.drawGeohashArea("xn77519", 0.7)
-      this.drawGeohashArea("xn7751", 0.6)
-      this.drawGeohashArea("xn775", 0.5)
+      // this.drawGeohashArea("xn77519jj", 1.0)
+      // this.drawGeohashArea("xn77519j", 0.8)
+      // this.drawGeohashArea("xn77519", 0.7)
+      // this.drawGeohashArea("xn7751", 0.6)
+      // this.drawGeohashArea("xn775", 0.5)
+      this.drawGeohashNeighbors("xn7751")
+    },
+    drawGeohashNeighbors(hash) {
+      this.drawGeohashArea(hash)
+      geohash.neighbors(hash).forEach(this.drawGeohashArea)
     },
     drawGeohashArea(hash, strokeOpacity=1.0) {
+      console.log("drawGeohashArea")
       const bbox = geohash.decode_bbox(hash)
       const coordinates = [
         {lat: bbox[0], lng: bbox[1]},
