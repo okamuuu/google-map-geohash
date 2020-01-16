@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@googlemaps/loader": "^0.0.5",
+    "bulma": "^0.8.0",
     "g": "^2.0.1",
     "google-maps-api-loader": "^1.1.1",
     "http-server": "^0.12.1",

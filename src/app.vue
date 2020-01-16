@@ -1,15 +1,42 @@
 <template>
   <div>
-    <div id="map"></div>
-    <template v-if="!!google && !!map">
-      <child-marker 
-        v-for="(marker,i) in markers"
-        :key="i"
-        :position="marker" 
-        :google="google"
-        :map="map"
-      />
-    </template>
+    <div class="container">
+      <div class="notification">
+        Google Map GeoHash
+      </div>
+    </div>
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div id="map"></div>
+          <template v-if="!!google && !!map">
+            <child-marker 
+              v-for="(marker,i) in markers"
+              :key="i"
+              :position="marker" 
+              :google="google"
+              :map="map"
+            />
+          </template>
+        </div>
+        <!--
+        <div class="column">
+          xx
+        </div>
+        -->
+      </div>
+    </div>
+    <div class="container">
+      <footer class="footer">
+        <div class="content has-text-centered">
+          <p>
+            <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
+            <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+            is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+          </p>
+        </div>
+      </footer>
+    </div>
   </div>
 </template>
 
@@ -59,6 +86,32 @@ export default {
       const mapContainer = this.$el.querySelector('#map')
       const { Map } = this.google.maps
       this.map = new Map(mapContainer, this.mapConfig)
+    
+      this.drawGeohashArea("xn77519jj", 1.0)
+      this.drawGeohashArea("xn77519j", 0.8)
+      this.drawGeohashArea("xn77519", 0.7)
+      this.drawGeohashArea("xn7751", 0.6)
+      this.drawGeohashArea("xn775", 0.5)
+    },
+    drawGeohashArea(hash, strokeOpacity=1.0) {
+      const bbox = geohash.decode_bbox(hash)
+      const coordinates = [
+        {lat: bbox[0], lng: bbox[1]},
+        {lat: bbox[0], lng: bbox[3]},
+        {lat: bbox[2], lng: bbox[3]},
+        {lat: bbox[2], lng: bbox[1]},
+        {lat: bbox[0], lng: bbox[1]},
+      ];
+
+      const { Polyline } = this.google.maps
+      const path = new Polyline({
+        path: coordinates,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity,
+        strokeWeight: 2
+      });
+      path.setMap(this.map);
     }
   }
 }
@@ -67,11 +120,7 @@ export default {
 <style lang="scss">
 #map {
   width: 100%;
-  height: 800px;
+  height: 600px;
 }
 
-p {
-  font-size: 2em;
-  text-align: center;
-}
 </style>
