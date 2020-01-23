@@ -20497,7 +20497,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var API_BASE_URL = window.location.origin === 'http://localhost:3000/' ? 'http://localhost:3000/api' : 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api';
+var API_BASE_URL = window.location.origin === 'http://localhost:1234' ? 'http://localhost:3000/api' : 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api';
 var items = [[35.692734, 139.703752], // 新宿ピカデリー
 [35.690157, 139.705896], // 新宿バルト9
 [35.695415, 139.702055], // 東宝シネマズ
@@ -20599,10 +20599,11 @@ var _default = {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
+                this.emphasizedMarkers = [];
+                _context2.next = 3;
                 return _axios.default.get("".concat(API_BASE_URL, "/locations/").concat(hotel.geohash));
 
-              case 2:
+              case 3:
                 _ref2 = _context2.sent;
                 data = _ref2.data;
                 geohashList = data.geohashList, hotels = data.hotels;
@@ -20630,8 +20631,8 @@ var _default = {
                     markers.push({
                       isEmphasized: false,
                       name: hotel.name,
-                      lat: Number(hotel.latitude) + 0.1,
-                      lng: Number(hotel.longitude) + 0.1,
+                      lat: Number(hotel.latitude),
+                      lng: Number(hotel.longitude),
                       geohash: hotel.geohash,
                       hotel: hotel
                     });
@@ -20640,7 +20641,7 @@ var _default = {
                 this.markers = markers;
                 this.emphasizedMarkers = emphasizedMarkers;
 
-              case 14:
+              case 15:
               case "end":
                 return _context2.stop();
             }
@@ -20726,7 +20727,6 @@ exports.default = _default;
                       position: marker,
                       google: _vm.google,
                       map: _vm.map,
-                      hotel: marker.hotel,
                       onClick: _vm.handleClickMarker
                     }
                   })
@@ -20742,7 +20742,6 @@ exports.default = _default;
                       position: marker,
                       google: _vm.google,
                       map: _vm.map,
-                      hotel: marker.hotel,
                       onClick: _vm.handleClickMarker
                     }
                   })
@@ -20879,6 +20878,7 @@ var _default = {
   },
   data: function data() {
     return {
+      id: null,
       marker: null,
       infoWindow: null
     };
@@ -20886,15 +20886,16 @@ var _default = {
   mounted: function mounted() {
     console.log("mounted");
     var Marker = this.google.maps.Marker;
-    console.log(this.isEmphasized);
     this.marker = new Marker({
       position: this.position,
       map: this.map,
       icon: this.isEmphasized ? emphasizedIcon : defaultIcon
     });
     this.marker.addListener('click', this.handleClick);
+    this.id = this.position.hotel.id;
+    this.geohash = this.position.geohash;
     this.infoWindow = new this.google.maps.InfoWindow({
-      content: "<div>lat: ".concat(this.position.lat, "<br />lng: ").concat(this.position.lng, "<br />geohash: ").concat(this.position.geohash, "</div>")
+      content: "<div>name: ".concat(this.position.name, "</div>")
     });
   },
   beforeDestroy: function beforeDestroy() {
@@ -20909,7 +20910,10 @@ var _default = {
       setTimeout(function () {
         return _this.infoWindow.close(_this.map, _this.marker);
       }, 2000);
-      this.onClick(this.hotel);
+      this.onClick({
+        id: this.id,
+        geohash: this.geohash
+      });
     },
     handleChangeEmphasize: function handleChangeEmphasize() {
       console.log("handleChangeEmphasize");
@@ -21007,7 +21011,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55600" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60334" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
