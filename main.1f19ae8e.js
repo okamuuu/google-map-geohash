@@ -20497,7 +20497,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var API_BASE_URL = window.location.origin === 'http://localhost:1234' ? 'http://localhost:3000/api' : 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api';
+// const API_BASE_URL = window.location.origin === 'http://localhost:1234' ? 'http://localhost:3000/api' : 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api'
+var API_BASE_URL = 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api';
 var items = [[35.692734, 139.703752], // 新宿ピカデリー
 [35.690157, 139.705896], // 新宿バルト9
 [35.695415, 139.702055], // 東宝シネマズ
@@ -20557,9 +20558,7 @@ var _default = {
                 this.map = new Map(mapContainer, this.mapConfig);
                 _context.next = 5;
                 return _axios.default.get("".concat(API_BASE_URL, "/hotels"), {
-                  headers: {
-                    'Access-Control-Allow-Origin': '*'
-                  }
+                  withCredentials: true
                 });
 
               case 5:
@@ -20606,9 +20605,7 @@ var _default = {
                 this.emphasizedMarkers = [];
                 _context2.next = 3;
                 return _axios.default.get("".concat(API_BASE_URL, "/locations/").concat(hotel.geohash), {
-                  headers: {
-                    'Access-Control-Allow-Origin': '*'
-                  }
+                  withCredentials: true
                 });
 
               case 3:
@@ -21019,7 +21016,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60334" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53427" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
