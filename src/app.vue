@@ -61,8 +61,7 @@ import axios from 'axios'
 import geohash from 'ngeohash'
 import GoogleMapsApiLoader from 'google-maps-api-loader'
 
-// const API_BASE_URL = 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api'
-const API_BASE_URL = 'http://localhost:3000/api'
+const API_BASE_URL = window.location.origin === 'http://localhost:3000/' ? 'http://localhost:3000/api' : 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api'
 
 const items = [
  [ 35.692734, 139.703752 ], // 新宿ピカデリー
