@@ -12,10 +12,25 @@
           <template v-if="!!google && !!map">
             <child-marker 
               v-for="(marker,i) in markers"
-              :key="i"
+              :key="`marker:${i}`"
+              :isEmphasized="false"
               :position="marker" 
               :google="google"
               :map="map"
+              :hotel="marker.hotel"
+              :onClick="handleClickMarker"
+            />
+          </template>
+          <template v-if="!!google && !!map">
+            <child-marker 
+              v-for="(marker,i) in emphasizedMarkers"
+              :key="`emphasizedMarkers:${i}`"
+              :isEmphasized="true"
+              :position="marker" 
+              :google="google"
+              :map="map"
+              :hotel="marker.hotel"
+              :onClick="handleClickMarker"
             />
           </template>
         </div>
@@ -41,8 +56,13 @@
 </template>
 
 <script>
+import "babel-polyfill";
+import axios from 'axios'
 import geohash from 'ngeohash'
 import GoogleMapsApiLoader from 'google-maps-api-loader'
+
+// const API_BASE_URL = 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api'
+const API_BASE_URL = 'http://localhost:3000/api'
 
 const items = [
  [ 35.692734, 139.703752 ], // 新宿ピカデリー
@@ -60,14 +80,12 @@ export default {
     return {
       google: null,
       map: null,
-      markers: items.map(x => ({
-        lat: x[0],
-        lng: x[1],
-        geohash: getGeoHash(x[0], x[1]) 
-      })),
+      selectedHotels: {},
+      markers: [],
+      emphasizedMarkers: [],
       mapConfig: {
         zoom: 15,
-        center: { lat: items[0][0], lng: items[0][1] }
+        center: { lat: 35.692734, lng: 139.703752 }
       }
     }
   }, 
@@ -82,17 +100,56 @@ export default {
     })
   },
   methods: {
-    initializeMap () {
+    async initializeMap () {
       const mapContainer = this.$el.querySelector('#map')
       const { Map } = this.google.maps
       this.map = new Map(mapContainer, this.mapConfig)
-    
-      // this.drawGeohashArea("xn77519jj", 1.0)
-      // this.drawGeohashArea("xn77519j", 0.8)
-      // this.drawGeohashArea("xn77519", 0.7)
-      // this.drawGeohashArea("xn7751", 0.6)
-      // this.drawGeohashArea("xn775", 0.5)
+
+      const { data } = await axios.get(`${API_BASE_URL}/hotels`)
+      this.hotels = data
+      this.markers = this.hotels.map(hotel => ({
+        isEmphasized: false,
+        name: hotel.name,
+        lat: Number(hotel.latitude),
+        lng: Number(hotel.longitude),
+        geohash: hotel.geohash,
+        hotel: hotel
+      }))
       this.drawGeohashNeighbors("xn7751")
+    },
+    async handleClickMarker(hotel) {
+
+      const { data } = await axios.get(`${API_BASE_URL}/locations/${hotel.geohash}`)
+      const foundHotels = {} 
+      data.forEach(hotel => {
+        foundHotels[hotel.id] = true
+      })
+      console.log(foundHotels)
+
+      const markers = []
+      const emphasizedMarkers = []
+      this.hotels.forEach(hotel => {
+        if (foundHotels[hotel.id]) {
+          emphasizedMarkers.push({
+            isEmphasized: true,
+            name: hotel.name,
+            lat: Number(hotel.latitude),
+            lng: Number(hotel.longitude),
+            geohash: hotel.geohash,
+            hotel: hotel
+          })
+        } else {
+          markers.push({isEmphasized: false,
+            name: hotel.name,
+            lat: Number(hotel.latitude) + 0.1,
+            lng: Number(hotel.longitude) + 0.1,
+            geohash: hotel.geohash,
+            hotel: hotel
+          })
+        }
+      })
+      this.markers = markers
+      this.emphasizedMarkers = emphasizedMarkers
     },
     drawGeohashNeighbors(hash) {
       this.drawGeohashArea(hash)

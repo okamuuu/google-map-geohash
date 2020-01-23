@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@googlemaps/loader": "^0.0.5",
+    "axios": "^0.19.2",
+    "babel-polyfill": "^6.26.0",
     "bulma": "^0.8.0",
     "g": "^2.0.1",
     "google-maps-api-loader": "^1.1.1",
