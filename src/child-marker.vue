@@ -31,6 +31,7 @@ export default {
   },
   data () {
     return { 
+      id: null,
       marker: null,
       infoWindow: null
     }
@@ -38,15 +39,16 @@ export default {
   mounted() {
     console.log("mounted")
     const { Marker } = this.google.maps
-    console.log(this.isEmphasized)
     this.marker = new Marker({
       position: this.position,
       map: this.map,
       icon: this.isEmphasized ? emphasizedIcon : defaultIcon
     })
     this.marker.addListener('click', this.handleClick);
+    this.id = this.position.hotel.id
+    this.geohash = this.position.geohash
     this.infoWindow = new this.google.maps.InfoWindow({
-      content: `<div>lat: ${this.position.lat}<br />lng: ${this.position.lng}<br />geohash: ${this.position.geohash}</div>`
+      content: `<div>name: ${this.position.name}</div>`
     })
   },
   beforeDestroy () {
@@ -57,7 +59,7 @@ export default {
     handleClick() {
       this.infoWindow.open(this.map, this.marker)
       setTimeout(() => this.infoWindow.close(this.map, this.marker), 2000); 
-      this.onClick(this.hotel)
+      this.onClick({id: this.id, geohash: this.geohash})
     },
     handleChangeEmphasize() {
       console.log("handleChangeEmphasize")

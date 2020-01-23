@@ -17,7 +17,6 @@
               :position="marker" 
               :google="google"
               :map="map"
-              :hotel="marker.hotel"
               :onClick="handleClickMarker"
             />
           </template>
@@ -29,7 +28,6 @@
               :position="marker" 
               :google="google"
               :map="map"
-              :hotel="marker.hotel"
               :onClick="handleClickMarker"
             />
           </template>
@@ -61,7 +59,7 @@ import axios from 'axios'
 import geohash from 'ngeohash'
 import GoogleMapsApiLoader from 'google-maps-api-loader'
 
-const API_BASE_URL = window.location.origin === 'http://localhost:3000/' ? 'http://localhost:3000/api' : 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api'
+const API_BASE_URL = window.location.origin === 'http://localhost:1234' ? 'http://localhost:3000/api' : 'https://v8y3c9vp2c.execute-api.ap-northeast-1.amazonaws.com/dev/api'
 
 const items = [
  [ 35.692734, 139.703752 ], // 新宿ピカデリー
@@ -117,6 +115,8 @@ export default {
     },
     async handleClickMarker(hotel) {
 
+      this.emphasizedMarkers = []
+ 
       const { data } = await axios.get(`${API_BASE_URL}/locations/${hotel.geohash}`)
       const { geohashList, hotels } = data
 
@@ -145,8 +145,8 @@ export default {
         } else {
           markers.push({isEmphasized: false,
             name: hotel.name,
-            lat: Number(hotel.latitude) + 0.1,
-            lng: Number(hotel.longitude) + 0.1,
+            lat: Number(hotel.latitude),
+            lng: Number(hotel.longitude),
             geohash: hotel.geohash,
             hotel: hotel
           })
