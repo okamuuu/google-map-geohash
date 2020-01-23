@@ -20556,7 +20556,11 @@ var _default = {
                 Map = this.google.maps.Map;
                 this.map = new Map(mapContainer, this.mapConfig);
                 _context.next = 5;
-                return _axios.default.get("".concat(API_BASE_URL, "/hotels"));
+                return _axios.default.get("".concat(API_BASE_URL, "/hotels"), {
+                  headers: {
+                    'Access-Control-Allow-Origin': '*'
+                  }
+                });
 
               case 5:
                 _ref = _context.sent;
@@ -20601,7 +20605,11 @@ var _default = {
               case 0:
                 this.emphasizedMarkers = [];
                 _context2.next = 3;
-                return _axios.default.get("".concat(API_BASE_URL, "/locations/").concat(hotel.geohash));
+                return _axios.default.get("".concat(API_BASE_URL, "/locations/").concat(hotel.geohash), {
+                  headers: {
+                    'Access-Control-Allow-Origin': '*'
+                  }
+                });
 
               case 3:
                 _ref2 = _context2.sent;
