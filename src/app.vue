@@ -115,16 +115,21 @@ export default {
         geohash: hotel.geohash,
         hotel: hotel
       }))
-      this.drawGeohashNeighbors("xn7751")
     },
     async handleClickMarker(hotel) {
 
       const { data } = await axios.get(`${API_BASE_URL}/locations/${hotel.geohash}`)
+      const { geohashList, hotels } = data
+
+      this.geohashList = geohashList
+      this.geohashList.forEach(geohash => {
+        this.drawGeohashArea(geohash, 0.2)
+      })
+      
       const foundHotels = {} 
-      data.forEach(hotel => {
+      hotels.forEach(hotel => {
         foundHotels[hotel.id] = true
       })
-      console.log(foundHotels)
 
       const markers = []
       const emphasizedMarkers = []
